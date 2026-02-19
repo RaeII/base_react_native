@@ -5,18 +5,27 @@ export const useHomeModel = () => {
 
     const perPage = 5
     
-    const {data} = useInfiniteQuery({
+    const {data,fetchNextPage,isFetchingNextPage, hasNextPage, isFetching} = useInfiniteQuery({
         queryKey: ["users"],
         queryFn: ({pageParam = 1}) => getAllUsers(pageParam, perPage),
         initialPageParam: 1,
-        getNextPageParam: () => {
-            return 1;
+        getNextPageParam: (lastPage,_allPages,lastPageParam) => {
+            if(!lastPage ||  lastPageParam >= lastPage.pagination.totalPages){
+                return undefined;
+            }
+            return lastPageParam + 1;
         },
     })
 
-    console.log("users",data)
+    const users = data?.pages.flatMap((page) => page.data) || [];
+
+    console.log("users",users)
 
     return {
-        data
+        users,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        isFetching
     };
 }
