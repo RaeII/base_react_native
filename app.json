@@ -24,6 +24,9 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
+      "output": "static",
+      "title": "Base React Native",
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
