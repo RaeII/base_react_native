@@ -1,3 +1,129 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* === TEMA CLARO === */
+    /* Fundo principal - branco */
+    --background: 0 0% 100%;
+    /* Texto principal - preto escuro */
+    --foreground: 222 47% 11%;
+
+    /* Cor primária - Azul sistema */
+    --primary: 217 91% 60%;
+    /* Texto sobre primária */
+    --primary-foreground: 0 0% 100%;
+
+    /* Cor secundária - Azul claro suave */
+    --secondary: 214 95% 93%;
+    /* Texto sobre secundária */
+    --secondary-foreground: 222 47% 11%;
+
+    /* Cor muted - Cinza claro */
+    --muted: 210 40% 96%;
+    /* Texto muted */
+    --muted-foreground: 215 16% 47%;
+
+    /* Cor accent - Azul claro */
+    --accent: 214 95% 93%;
+    /* Texto accent */
+    --accent-foreground: 222 47% 11%;
+
+    /* Cor destrutiva - Vermelho */
+    --destructive: 0 84% 60%;
+    /* Texto destrutivo */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Card - Branco */
+    --card: 0 0% 100%;
+    /* Texto do card */
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    /* Texto do popover */
+    --popover-foreground: 222 47% 11%;
+
+    /* Borda */
+    --border: 214 32% 91%;
+    /* Input borda */
+    --input: 214 32% 91%;
+    /* Ring (foco) */
+    --ring: 217 91% 60%;
+
+    /* Cor de sucesso */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Cor de aviso */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Cor de info */
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    /* === TEMA ESCURO === */
+    /* Fundo principal - Preto padrão escuro */
+    --background: 222 47% 5%;
+    /* Texto principal - Branco */
+    --foreground: 210 40% 98%;
+
+    /* Cor primária - Azul sistema (mesmo azul) */
+    --primary: 217 91% 60%;
+    /* Texto sobre primária */
+    --primary-foreground: 0 0% 100%;
+
+    /* Cor secundária - Azul escuro suave */
+    --secondary: 217 33% 17%;
+    /* Texto sobre secundária */
+    --secondary-foreground: 210 40% 98%;
+
+    /* Cor muted - Cinza escuro */
+    --muted: 217 33% 17%;
+    /* Texto muted */
+    --muted-foreground: 215 20% 65%;
+
+    /* Cor accent - Azul escuro */
+    --accent: 217 33% 17%;
+    /* Texto accent */
+    --accent-foreground: 210 40% 98%;
+
+    /* Cor destrutiva - Vermelho */
+    --destructive: 0 63% 31%;
+    /* Texto destrutivo */
+    --destructive-foreground: 210 40% 98%;
+
+    /* Card - Preto mais claro */
+    --card: 222 47% 7%;
+    /* Texto do card */
+    --card-foreground: 210 40% 98%;
+
+    /* Popover */
+    --popover: 222 47% 7%;
+    /* Texto do popover */
+    --popover-foreground: 210 40% 98%;
+
+    /* Borda */
+    --border: 217 33% 17%;
+    /* Input borda */
+    --input: 217 33% 17%;
+    /* Ring (foco) */
+    --ring: 217 91% 60%;
+
+    /* Cor de sucesso */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Cor de aviso */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Cor de info */
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+  }
+}

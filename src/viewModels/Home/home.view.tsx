@@ -2,7 +2,6 @@ import { ActivityIndicator, SectionList, Text, View } from "react-native";
 import { FC } from "react";
 import { useHomeModel } from "./home.model";
 import { UserItem } from "./components/userItem";
-import { styles } from "./style";
 
 export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({
     users,
@@ -24,10 +23,10 @@ export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({
                 },
             ]}
             renderSectionHeader={({ section: { title } }) => (
-                <Text style={styles.title}>{title}</Text>
+                <Text className="text-foreground text-2xl font-bold mb-4">{title}</Text>
             )}
             renderItem={({ item }) => <UserItem key={item.id} user={item}/>}
-            style={styles.container}
+            className="flex-1 bg-background p-4"
             onEndReached={() =>{
                 if(hasNextPage && !isFetchingNextPage){
                     fetchNextPage()
@@ -35,7 +34,7 @@ export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({
             }}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
-                isFetchingNextPage ? <ActivityIndicator size="large" color="#fff" /> : null
+                isFetchingNextPage ? <ActivityIndicator size="large" className="text-primary" /> : null
             }
         />
     )

@@ -4,15 +4,16 @@ import { Text, TouchableOpacity } from 'react-native';
 import { cn } from '../../lib/utils';
 
 const buttonVariants = cva(
-  'flex flex-row items-center justify-center rounded-md',
+  'flex flex-row items-center justify-center rounded-md web:transition-all web:duration-200 web:hover:opacity-90',
   {
     variants: {
       variant: {
         default: 'bg-primary',
         secondary: 'bg-secondary',
         destructive: 'bg-destructive',
-        ghost: 'bg-slate-700',
+        ghost: 'bg-muted',
         link: 'text-primary underline-offset-4',
+        outline: 'border border-border bg-transparent',
       },
       size: {
         default: 'h-10 px-4',
@@ -33,8 +34,9 @@ const buttonTextVariants = cva('text-center font-medium', {
       default: 'text-primary-foreground',
       secondary: 'text-secondary-foreground',
       destructive: 'text-destructive-foreground',
-      ghost: 'text-primary-foreground',
-      link: 'text-primary-foreground underline',
+      ghost: 'text-foreground',
+      link: 'text-primary underline',
+      outline: 'text-foreground',
     },
     size: {
       default: 'text-base',
@@ -64,6 +66,7 @@ function Button({
 }: ButtonProps) {
   return (
     <TouchableOpacity
+      activeOpacity={0.8}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >

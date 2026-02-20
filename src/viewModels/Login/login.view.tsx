@@ -12,20 +12,20 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
 }) => {
     return (
         <KeyboardAvoidingView
-            className="flex-1"
+            className="flex-1 bg-background"
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <ScrollView
-                contentContainerClassName="flex-1 justify-center"
+                contentContainerClassName="flex-1 justify-center items-center"
                 keyboardShouldPersistTaps="handled"
             >
-                <View className="flex-1 justify-center px-8">
+                <View className="flex-1 justify-center px-8 w-full max-w-md">
                     {/* Header */}
                     <View className="items-center mb-12">
-                        <Text className="text-3xl font-bold text-white">
+                        <Text className="text-3xl font-bold text-foreground">
                             Bem-vindo
                         </Text>
-                        <Text className="text-base text-slate-400 mt-2">
+                        <Text className="text-base text-muted-foreground mt-2">
                             Entre na sua conta para continuar
                         </Text>
                     </View>
@@ -36,10 +36,7 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                         <View>
                             <Input
                                 label="Usuário ou e-mail"
-                                labelClasses="text-slate-300"
-                                inputClasses="text-white"
                                 placeholder="Digite seu usuário ou e-mail"
-                                placeholderTextColor="#64748b"
                                 value={form.login}
                                 onChangeText={(value) => handleChange("login", value)}
                                 autoCapitalize="none"
@@ -47,7 +44,7 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                                 keyboardType="email-address"
                             />
                             {errors.login && (
-                                <Text className="text-red-400 text-sm mt-1">
+                                <Text className="text-destructive text-sm mt-1">
                                     {errors.login}
                                 </Text>
                             )}
@@ -57,16 +54,13 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                         <View>
                             <Input
                                 label="Senha"
-                                labelClasses="text-slate-300"
-                                inputClasses="text-white"
                                 placeholder="Digite sua senha"
-                                placeholderTextColor="#64748b"
                                 value={form.password}
                                 onChangeText={(value) => handleChange("password", value)}
                                 secureTextEntry
                             />
                             {errors.password && (
-                                <Text className="text-red-400 text-sm mt-1">
+                                <Text className="text-destructive text-sm mt-1">
                                     {errors.password}
                                 </Text>
                             )}
