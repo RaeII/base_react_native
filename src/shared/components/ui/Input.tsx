@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Text, TextInput, View } from 'react-native';
 
-import { cn } from '../lib/utils';
+import { cn } from '../../lib/utils';
 
 export interface InputProps
   extends React.ComponentPropsWithoutRef<typeof TextInput> {

@@ -1,9 +1,8 @@
-import { Text, View } from "react-native";
+import { useLoginModel } from "@/viewModels/Login/login.model";
+import { LoginView } from "@/viewModels/Login/login.view";
 
 export default function Login() {
-    return (
-        <View>
-            <Text>Login</Text>
-        </View>
-    );
+    const loginModel = useLoginModel();
+
+    return <LoginView {...loginModel} />;
 }
