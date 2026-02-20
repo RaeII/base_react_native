@@ -1,12 +1,15 @@
 import { api } from "../index.api";
 import type {
   User,
-  PaginatedResponse,
   CreateUserPayload,
   UpdateUserPayload,
+} from "@/shared/types/user.types";
+
+import {
+  PaginatedResponse,
   UserResponse,
   CreateUserResponse,
-} from "@/shared/types/user.types";
+} from "@/shared/types/api.types/user.api.types";
 
 // ─── Rotas de Usuário ────────────────────────────────────────────
 

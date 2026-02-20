@@ -4,7 +4,16 @@
     "strict": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": [
+        "*"
+      ]
     }
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./src/shared/types/expo-env.d.ts",
+    "tailwind.config.js",
+    "nativewind-env.d.ts"
+  ]
 }
