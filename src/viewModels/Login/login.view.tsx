@@ -23,7 +23,7 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
             >
                 <View className="flex-1 justify-center px-8 w-full max-w-md">
                     {/* Header */}
-                    <View className="items-center mb-12">
+                    <View className="items-center mb-2">
                         <Text className="text-3xl font-bold text-foreground">
                             Bem-vindo
                         </Text>
@@ -33,16 +33,18 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                     </View>
 
                     {/* Erro geral do login */}
-                    {loginError && (
-                        <View className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                            <Text className="text-destructive text-sm text-center">
-                                {loginError}
-                            </Text>
-                        </View>
-                    )}
+                    <View 
+                        className={`mb-2 p-1 rounded-lg border bg-destructive/10 border-destructive/20 ${
+                            loginError ? "opacity-100" : "opacity-0"
+                        }`}
+                    >
+                        <Text className="text-destructive text-sm text-center">
+                            {loginError || " "}
+                        </Text>
+                    </View>
 
                     {/* Formulário */}
-                    <View className="gap-5">
+                    <View className="">
                         {/* Input Usuário ou E-mail */}
                         <View>
                             <Input
@@ -55,11 +57,9 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                                 keyboardType="email-address"
                                 editable={!loginLoading}
                             />
-                            {errors.login && (
-                                <Text className="text-destructive text-sm mt-1">
-                                    {errors.login}
-                                </Text>
-                            )}
+                            <Text className={`text-destructive text-sm mt-1 ${errors.login ? "opacity-100" : "opacity-0"}`}>
+                                {errors.login || " "}
+                            </Text>
                         </View>
 
                         {/* Input Senha */}
@@ -72,16 +72,14 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                                 secureTextEntry
                                 editable={!loginLoading}
                             />
-                            {errors.password && (
-                                <Text className="text-destructive text-sm mt-1">
-                                    {errors.password}
-                                </Text>
-                            )}
+                            <Text className={`text-destructive text-sm mt-1 ${errors.password ? "opacity-100" : "opacity-0"}`}>
+                                {errors.password || " "}
+                            </Text>
                         </View>
                     </View>
 
                     {/* Botão Login */}
-                    <View className="mt-8">
+                    <View>
                         <Button
                             label={loginLoading ? "Entrando..." : "Entrar"}
                             size="lg"
