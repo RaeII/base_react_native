@@ -1,13 +1,29 @@
-import { HomeView } from '../viewModels/Home/home.view';
-import { useHomeModel } from '@/viewModels/Home/home.model';
+import { Redirect } from "expo-router";
+import { View, ActivityIndicator } from "react-native";
+import { useAuth } from "@/shared/contexts/AuthContext";
 
-export default function App() {
+/**
+ * Rota raiz — redireciona com base no estado de autenticação.
+ *
+ * - Autenticado → (authenticated)
+ * - Não autenticado → (auth)/Login
+ */
+export default function Index() {
+  const { user, loading } = useAuth();
 
-  const props = useHomeModel();
+  // Exibe loading enquanto verifica autenticação
+  if (loading) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center">
+        <ActivityIndicator size="large" className="text-primary" />
+      </View>
+    );
+  }
 
-  return (
-    <HomeView {...props} />
-  );
+  // Redireciona baseado no estado de autenticação
+  if (user) {
+    return <Redirect href="/(authenticated)" />;
+  }
+
+  return <Redirect href="/(auth)/Login" />;
 }
-
-

@@ -13,6 +13,7 @@ const baseURL = Platform.select({
 export const api = axios.create({
   baseURL,
   timeout: 60_000,
+  withCredentials: true, // Envia cookies automaticamente em todas as requests
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -42,16 +43,27 @@ export class ApiError extends Error {
   }
 }
 
+// ─── Callback de Autenticação Falha ──────────────────────────────
+
+/**
+ * Callback invocado quando uma requisição retorna 401/403
+ * indicando que a sessão expirou ou é inválida.
+ * Configurado pelo AuthContext para forçar logout.
+ */
+let onAuthenticationFailed: (() => void) | null = null;
+
+export const setAuthenticationFailedCallback = (callback: () => void) => {
+  onAuthenticationFailed = callback;
+};
+
+export const clearAuthenticationFailedCallback = () => {
+  onAuthenticationFailed = null;
+};
 
 // ─── Interceptor de Request ──────────────────────────────────────
 
 api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    // Futuramente: injetar token de autenticação aqui
-    // const token = await getToken();
-    // if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  },
+  (config: InternalAxiosRequestConfig) => config,
   (error: AxiosError) => Promise.reject(error)
 );
 
@@ -60,6 +72,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError<ApiErrorResponse>) => {
+    // Verifica se é erro de autenticação (sessão expirada/inválida)
+    if (error.response) {
+      const { status, config } = error.response;
+      const isAuthEndpoint = config?.url?.includes("/auth/login");
+
+      // Apenas dispara callback se NÃO for o próprio endpoint de login
+      if ((status === 401 || status === 403) && !isAuthEndpoint) {
+        if (onAuthenticationFailed) {
+          onAuthenticationFailed();
+        }
+      }
+    }
+
     return Promise.reject(handleApiError(error));
   }
 );

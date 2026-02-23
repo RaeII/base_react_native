@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
 import { z } from "zod/v4";
+import { router } from "expo-router";
+import { useAuth } from "@/shared/contexts/AuthContext";
+import { ApiError } from "@/shared/api/index.api";
 
 /** Schema de validação do formulário de login */
 const loginSchema = z.object({
@@ -17,17 +20,21 @@ type LoginFormData = z.infer<typeof loginSchema>;
 type LoginFormErrors = Partial<Record<keyof LoginFormData, string>>;
 
 export const useLoginModel = () => {
+    const { login, loginLoading } = useAuth();
+
     const [form, setForm] = useState<LoginFormData>({
         login: "",
         password: "",
     });
 
     const [errors, setErrors] = useState<LoginFormErrors>({});
+    const [loginError, setLoginError] = useState<string | null>(null);
 
     /** Atualiza um campo do formulário e limpa o erro correspondente */
     const handleChange = useCallback((field: keyof LoginFormData, value: string) => {
         setForm((prev) => ({ ...prev, [field]: value }));
         setErrors((prev) => ({ ...prev, [field]: undefined }));
+        setLoginError(null);
     }, []);
 
     /** Valida o formulário e retorna se é válido */
@@ -52,17 +59,34 @@ export const useLoginModel = () => {
         return true;
     }, [form]);
 
-    /** Executa o login (placeholder para futura integração) */
-    const handleLogin = useCallback(() => {
+    /** Executa o login com a API de autenticação */
+    const handleLogin = useCallback(async () => {
         if (!validate()) return;
 
-        // TODO: Integrar com API de autenticação
-        console.log("Login válido:", form);
-    }, [validate, form]);
+        setLoginError(null);
+
+        try {
+            await login({
+                login: form.login.trim(),
+                password: form.password,
+            });
+
+            // Login bem-sucedido — navega para área autenticada
+            router.replace("/(authenticated)");
+        } catch (error) {
+            if (error instanceof ApiError) {
+                setLoginError(error.message);
+            } else {
+                setLoginError("Erro inesperado. Tente novamente.");
+            }
+        }
+    }, [validate, form, login]);
 
     return {
         form,
         errors,
+        loginError,
+        loginLoading,
         handleChange,
         handleLogin,
     };

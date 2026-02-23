@@ -7,6 +7,8 @@ import { useLoginModel } from "./login.model";
 export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
     form,
     errors,
+    loginError,
+    loginLoading,
     handleChange,
     handleLogin,
 }) => {
@@ -30,6 +32,15 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                         </Text>
                     </View>
 
+                    {/* Erro geral do login */}
+                    {loginError && (
+                        <View className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                            <Text className="text-destructive text-sm text-center">
+                                {loginError}
+                            </Text>
+                        </View>
+                    )}
+
                     {/* Formulário */}
                     <View className="gap-5">
                         {/* Input Usuário ou E-mail */}
@@ -42,6 +53,7 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 keyboardType="email-address"
+                                editable={!loginLoading}
                             />
                             {errors.login && (
                                 <Text className="text-destructive text-sm mt-1">
@@ -58,6 +70,7 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                                 value={form.password}
                                 onChangeText={(value) => handleChange("password", value)}
                                 secureTextEntry
+                                editable={!loginLoading}
                             />
                             {errors.password && (
                                 <Text className="text-destructive text-sm mt-1">
@@ -70,10 +83,11 @@ export const LoginView: FC<ReturnType<typeof useLoginModel>> = ({
                     {/* Botão Login */}
                     <View className="mt-8">
                         <Button
-                            label="Entrar"
+                            label={loginLoading ? "Entrando..." : "Entrar"}
                             size="lg"
                             onPress={handleLogin}
                             className="w-full"
+                            disabled={loginLoading}
                         />
                     </View>
                 </View>
