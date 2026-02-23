@@ -1,0 +1,54 @@
+---
+alwaysApply: true
+---
+
+Faça sempre layout e especificação de UI/UX para um aplicativo premium e minimalista, com estética moderna e contemporânea (padrão atual de apps 2026), funcionando em Mobile (Android/iOS) e Web com consistência visual e ótima responsividade.
+
+## Objetivo
+
+- Propor um layout elegante, limpo, com bastante respiro, tipografia forte e hierarquia clara.
+- Manter sensação premium: superfícies bem definidas, contraste sutil, espaçamento consistente e microinterações discretas.
+- Entregar um design fácil de implementar em React Native com suporte completo para Android, iOS e Web.
+
+## Entregáveis obrigatórios
+
+- Estrutura do app (mapa de telas e navegação principal)
+- Wireframe textual (Mobile e Web) com ordem das seções, componentes e comportamento
+- Design system: tipografia sugerida, escala de espaçamentos, grid, estilo de botões, inputs, cards, estados (hover/focus/pressed/disabled/loading)
+- Componentes necessários (reutilizáveis e específicos por página) e como se comportam em cada plataforma
+- Regras de responsividade (breakpoints, adaptação de layout, variações mobile/tablet/desktop)
+- Acessibilidade e usabilidade (contraste, tamanho mínimo de toque, navegação por teclado no web, foco visível)
+
+## Regras de estilo (não negociar)
+
+- Minimalismo premium: nada poluído, nada “cheio de elementos decorativos”.
+- Priorize clareza e hierarquia.
+- Use padrões modernos: header limpo, CTAs bem posicionados, cards com borda/elevação sutil, ícones discretos, separadores leves.
+- Microinterações suaves (feedback de toque, loading elegante, transições rápidas e discretas).
+- Regras de desenvolvimento (obrigatório seguir exatamente)
+- O projeoto o padrão de arquitetura MVVM (Model-View-ViewModel), separando interface do usuário (View) da lógica de negócios (Model), mantenha o sempre esse padrão.
+- Cada pagina terá sua estrutura principal dentro de ./src/viewModel/, onde terá view e model, componentes que são sómente da pagina e os estilos da pagina.
+- Utilize compoentes sempre que achar necessário (./src/shared/components), apenas crie componentes que podem ser reaproveitado mais de uma vez, para cada componente crie uma pasta.
+- Sempre consulte a lista do componentes para visualizar se tem algum coponente que pode ser reutilizado em doc/components.md
+- Sempre que for criado um novo componente atualize a lista de componentes em doc/components.md
+- Estruture os componentes de forma reutilizável, mas apenas quando houver real necessidade de reutilização.
+- Desenvolva usando React Native com suporte completo para Android, iOS e Web.
+- IMPORTANTE Sempre desenvolva código para os 3 ambientes: Android, iOS e Web.
+- Utilize sempre Tailwind CSS e o sistema de componentes nativecn-ui.
+- Priorize desempenho e responsividade: evite re-renderizações desnecessárias, use memoização sempre que necessário e prefira layouts otimizados para multiplataforma.
+- Crie apenas o código estritamente necessário para a funcionalidade solicitada. Não adicione abstrações ou arquivos que não tenham uso imediato.
+- Todo código deve ser limpo, robusto e fácil de manter. Nomes de variáveis, funções e componentes devem ser descritivos e seguir convenções de nomenclatura consistentes (PascalCase para componentes, camelCase para variáveis e funções).
+- Use TypeScript em todo o projeto com tipagem clara e rigorosa.
+Evite dependências externas, a menos que sejam essenciais e bem justificadas.
+- Ao implementar qualquer funcionalidade, considere o impacto nos três ambientes (Android, iOS, Web).
+- Componentes devem ser responsivos por padrão e adaptáveis a diferentes tamanhos de tela.
+- Sempre crie Types para tipos globais para deixar o código organizado. Sempre faça em "./src/shared/types"
+- Sempre que possível, documente o código complexo ou que envolva regras de negócio da aplicação
+- A configuração do axios e as funções de requests estão em src/shared/api, sempre crie uma pasta para cada request
+- Sempre sempare a tipagem que é usada apenas para request em src/shared/types/api.types e a tipagem global em src/shared/types
+
+# MPORTANTE
+
+O Animated.View do reanimated não é registrado pelo NativeWind v4, então className nele é simplesmente ignorado. A solução foi separar as responsabilidades:
+Animated.View — cuida só de posição e animação (tudo via style inline)
+View filho — cuida do visual (className com Tailwind funciona normalmente)

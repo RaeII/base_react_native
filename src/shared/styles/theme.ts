@@ -1,0 +1,4 @@
+export const theme = {
+  light: { background: '#ffffff', foreground: '#000000' },
+  dark: { background: '#000000', foreground: '#ffffff' }
+};
