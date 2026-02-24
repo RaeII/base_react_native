@@ -4,11 +4,10 @@ import { Text, View } from "react-native";
 
 interface UserItemProps {
     user: User;
-    key: number;
 }
 
-export const UserItem: FC<UserItemProps> = ({ user, key }) => {
-    return <View className="w-full px-4 py-0 flex-row items-center gap-4 mb-4" key={key}>
+export const UserItem: FC<UserItemProps> = ({ user }) => {
+    return <View className="w-full px-4 py-0 flex-row items-center gap-4 mb-4">
         <View>            
             <View>
                 <Text className="text-foreground text-base font-bold">{user.username}</Text>

@@ -83,6 +83,24 @@ Esta lista documenta **apenas componentes reutilizáveis** (compartilhados) que 
   - Animação com `react-native-reanimated` (`useSharedValue`, `withTiming`)
   - Importante: o visual (Tailwind) fica em um `View` filho dentro do `Animated.View` (por limitação do NativeWind)
 
+### Navegação (Mobile) (`src/shared/components/BottomTabBar`)
+
+#### `BottomTabBar`
+
+- **Caminho**: `src/shared/components/BottomTabBar/BottomTabBar.tsx`
+- **Export**: `src/shared/components/BottomTabBar/index.ts`
+- **Para que serve**: Barra de navegação inferior para **dispositivos móveis** (Android/iOS), com visual minimalista premium, ícones e labels.
+- **Quando usar**: Layouts mobile que precisam de navegação principal por tabs, mantendo consistência visual com o design system.
+- **API/props principais**:
+  - **`tabs?`**: lista de tabs (`BottomTabBarItem[]`), com `key`, `label`, `route`, `icon`, `disabled?`, `matchMode?`
+  - **`className?`**: classes extras para o container externo
+  - **`DEFAULT_BOTTOM_TAB_ITEMS`**: configuração base com apenas rotas existentes no projeto atual (inicia em `Home`)
+- **Estrutura**:
+  - Navegação via `expo-router` (`router.push`) com proteção contra múltiplos toques durante transição
+  - Estado ativo sincronizado com `usePathname`
+  - Ajuste automático de safe area inferior (`useSafeAreaInsets`)
+  - No Web retorna `null`, pois a navegação principal do projeto no Web é feita pela `Sidebar`
+
 ### Navegação (Web) (`src/shared/components/Sidebar`)
 
 #### `Sidebar`

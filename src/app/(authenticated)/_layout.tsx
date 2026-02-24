@@ -1,7 +1,8 @@
 import { Redirect, Stack } from "expo-router";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, Platform } from "react-native";
 import { useAuth } from "@/shared/contexts/AuthContext";
 import { Sidebar } from "@/shared/components/Sidebar";
+import { BottomTabBar } from "@/shared/components/BottomTabBar";
 
 /**
  * Layout guard para rotas autenticadas.
@@ -11,6 +12,7 @@ import { Sidebar } from "@/shared/components/Sidebar";
  */
 export default function AuthenticatedLayout() {
   const { user, loading } = useAuth();
+  const isWeb = Platform.OS === "web";
 
   // Exibe loading enquanto verifica autenticação
   if (loading) {
@@ -27,18 +29,22 @@ export default function AuthenticatedLayout() {
   }
 
   return (
-    <View className="flex-1 flex-row bg-background">
-      <Sidebar />
-      <View className="flex-1">
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: "transparent",
-            },
-          }}
-        />
+    <View className="flex-1 bg-background">
+      <View className="flex-1 flex-row">
+        {isWeb ? <Sidebar /> : null}
+        <View className={isWeb ? "flex-1" : "flex-1 pb-24"}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: "transparent",
+              },
+            }}
+          />
+        </View>
       </View>
+
+      {!isWeb ? <BottomTabBar /> : null}
     </View>
   );
 }

@@ -37,7 +37,8 @@ export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({
                 renderSectionHeader={({ section: { title } }) => (
                     <Text className="text-foreground text-2xl font-bold mb-4">{title}</Text>
                 )}
-                renderItem={({ item }) => <UserItem key={item.id} user={item}/>}
+                renderItem={({ item }) => <UserItem user={item} />}
+                keyExtractor={(item) => item.id.toString()}
                 className="flex-1 bg-background p-4 web:w-full web:max-w-6xl web:self-center"
                 indicatorStyle={isDark ? "white" : "black"}
                 onEndReached={() =>{
