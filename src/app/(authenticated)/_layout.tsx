@@ -1,6 +1,7 @@
 import { Redirect, Stack } from "expo-router";
 import { View, ActivityIndicator } from "react-native";
 import { useAuth } from "@/shared/contexts/AuthContext";
+import { Sidebar } from "@/shared/components/Sidebar";
 
 /**
  * Layout guard para rotas autenticadas.
@@ -26,13 +27,18 @@ export default function AuthenticatedLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: {
-          backgroundColor: "transparent",
-        },
-      }}
-    />
+    <View className="flex-1 flex-row bg-background">
+      <Sidebar />
+      <View className="flex-1">
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+        />
+      </View>
+    </View>
   );
 }

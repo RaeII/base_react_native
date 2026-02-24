@@ -83,3 +83,19 @@ Esta lista documenta **apenas componentes reutilizáveis** (compartilhados) que 
   - Animação com `react-native-reanimated` (`useSharedValue`, `withTiming`)
   - Importante: o visual (Tailwind) fica em um `View` filho dentro do `Animated.View` (por limitação do NativeWind)
 
+### Navegação (Web) (`src/shared/components/Sidebar`)
+
+#### `Sidebar`
+
+- **Caminho**: `src/shared/components/Sidebar/Sidebar.tsx`
+- **Export**: `src/shared/components/Sidebar/index.ts`
+- **Para que serve**: Sidebar **minimalista e premium** (somente Web), com modo **recolhido/expandido**, itens com ícone + descrição, e área dedicada para **menus admin**.
+- **Quando usar**: Layouts e páginas no Web que precisam de navegação lateral persistente (ex.: painel).
+- **Destaques de UX/UI**:
+  - Recolher/expandir com animação suave (reanimated)
+  - Item ativo com destaque sutil
+  - Menus admin com leve ênfase visual (badge/estilo)
+  - Botão inferior de **Configurações** com dropdown ancorado (via `AnchoredModal`) e ação de logout
+- **Observação**:
+  - O componente retorna `null` fora do Web (Android/iOS).
+
