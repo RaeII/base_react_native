@@ -32,6 +32,8 @@
     /* === TEMA CLARO === */
     /* Fundo principal - branco */
     --background: 0 0% 100%;
+    /* Fundo externo para contraste entre shell e conteúdo */
+    --shell: 210 18% 95%;
     /* Texto principal - preto escuro */
     --foreground: 222 47% 11%;
 
@@ -94,6 +96,8 @@
     /* === TEMA ESCURO === */
     /* Fundo principal - Preto padrão escuro */
     --background: 222 47% 5%;
+    /* Fundo externo mais preto para aumentar contraste */
+    --shell: 222 47% 3%;
     /* Texto principal - Branco */
     --foreground: 210 40% 98%;
 

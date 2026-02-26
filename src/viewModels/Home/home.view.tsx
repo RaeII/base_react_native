@@ -1,56 +1,26 @@
-import { ActivityIndicator, SectionList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { FC } from "react";
 import { useHomeModel } from "./home.model";
-import { UserItem } from "./components/userItem";
-import { HomeHeader } from "./components/homeHeader";
 
-export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({
-    firstName,
-    isDark,
-    toggleTheme,
-    logout,
-    users,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage
-}) => {
-    return (
-        <View className="flex-1 bg-background">
-            <HomeHeader
-                firstName={firstName}
-                isDark={isDark}
-                onToggleTheme={toggleTheme}
-                onLogout={logout}
-            />
-
-            {/**
-              SectionList é uma lista que permite agrupar itens em seções
-              Ela é mais perfomática que o "map" em uma view
-             */}
-            <SectionList
-                sections={[
-                    {
-                        title: "Usuários",
-                        data: users,
-                    },
-                ]}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Text className="text-foreground text-2xl font-bold mb-4">{title}</Text>
-                )}
-                renderItem={({ item }) => <UserItem user={item} />}
-                keyExtractor={(item) => item.id.toString()}
-                className="flex-1 bg-background p-4 web:w-full web:max-w-6xl web:self-center"
-                indicatorStyle={isDark ? "white" : "black"}
-                onEndReached={() =>{
-                    if(hasNextPage && !isFetchingNextPage){
-                        fetchNextPage()
-                    }
-                }}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={
-                    isFetchingNextPage ? <ActivityIndicator size="large" className="text-primary" /> : null
-                }
-            />
+export const HomeView: FC<ReturnType<typeof useHomeModel>> = ({}) => {
+  return (
+    <View className="flex-1 bg-background p-4 web:p-6">
+      <View className="w-full max-w-5xl self-center gap-4">
+        <View className="rounded-3xl border border-border/70 p-5 web:p-6">
+          <Text className="text-2xl font-bold text-foreground">Home</Text>
+          <Text className="mt-2 text-sm text-muted-foreground">
+            Acompanhe seu progresso e acesse rapidamente suas principais funcionalidades.
+          </Text>
         </View>
-    )
-}
+
+        <View className="rounded-3xl border border-border/70 p-5 web:p-6">
+          <Text className="text-base font-semibold text-foreground">Visão geral</Text>
+          <Text className="mt-2 text-sm text-muted-foreground">
+            Este espaço foi estruturado para manter o mesmo padrão visual premium das telas
+            autenticadas em Android, iOS e Web.
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};

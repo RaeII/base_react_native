@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         // Cores semânticas do design system
         background: "hsl(var(--background))",
+        shell: "hsl(var(--shell))",
         foreground: "hsl(var(--foreground))",
 
         primary: {

@@ -2,14 +2,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Head from "expo-router/head";
-import { useColorScheme } from "nativewind";
+import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated";
 import { AuthProvider } from "@/shared/contexts/AuthContext";
 import "@/styles/global.css";
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 const queryClient = new QueryClient();
 
 export default function Layout() {
-    const { colorScheme } = useColorScheme();
 
     const Header = () => {
         return (

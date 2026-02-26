@@ -101,6 +101,21 @@ Esta lista documenta **apenas componentes reutilizáveis** (compartilhados) que 
   - Ajuste automático de safe area inferior (`useSafeAreaInsets`)
   - No Web retorna `null`, pois a navegação principal do projeto no Web é feita pela `Sidebar`
 
+### Header autenticado (`src/shared/components/AuthenticatedHeader`)
+
+#### `AuthenticatedHeader`
+
+- **Caminho**: `src/shared/components/AuthenticatedHeader/AuthenticatedHeader.tsx`
+- **Export**: `src/shared/components/AuthenticatedHeader/index.ts`
+- **Para que serve**: Header global para rotas autenticadas (principalmente no mobile/tablet sem sidebar), com toggle de tema e menu de logout.
+- **Quando usar**: No layout autenticado para manter ações globais consistentes entre telas sem duplicar header em cada view.
+- **API/props principais**:
+  - Não recebe props (consome `useAuth` e `useTheme` internamente)
+- **Estrutura**:
+  - Usa `AnchoredModal` para confirmação de logout ancorada no botão
+  - Respeita safe area superior com `useSafeAreaInsets`
+  - Mantém visual premium minimalista com borda sutil e ações compactas
+
 ### Navegação (Web) (`src/shared/components/Sidebar`)
 
 #### `Sidebar`

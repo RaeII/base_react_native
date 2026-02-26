@@ -6,21 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { AnchoredModal } from "@/shared/components/AnchoredModal";
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
 import { Button } from "@/shared/components/ui/Button";
+import { useAuth } from "@/shared/contexts/AuthContext";
+import { useTheme } from "@/shared/hooks/useTheme";
 
-interface HomeHeaderProps {
-  firstName: string;
-  isDark: boolean;
-  onToggleTheme: () => void;
-  onLogout: () => void;
-}
-
-export const HomeHeader: FC<HomeHeaderProps> = ({
-  isDark,
-  onToggleTheme,
-  onLogout,
-}) => {
+export const AuthenticatedHeader: FC = () => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  const { logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [isLogoutMenuOpen, setIsLogoutMenuOpen] = useState(false);
   const logoutButtonRef = useRef<any>(null);
 
@@ -28,7 +21,7 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
 
   const handleConfirmLogout = () => {
     setIsLogoutMenuOpen(false);
-    onLogout();
+    logout();
   };
 
   const handleCloseLogoutMenu = () => {
@@ -45,8 +38,7 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
 
   return (
     <View
-      className="relative border-b border-border/60 bg-background/95 px-1 pb-4 web:px-1"
-      style={{ paddingTop: insets.top + 10 }}
+      className="relative border-b border-border/60 bg-background/95 p-2 px-4 z-50"
     >
       <AnchoredModal
         isOpen={isLogoutMenuOpen}
@@ -54,11 +46,9 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
         anchorRef={logoutButtonRef}
         containerClassName="w-60"
       >
-        <Text className="text-sm font-medium text-foreground">
-          Deseja encerrar sua sessão?
-        </Text>
+        <Text className="text-sm font-medium text-foreground">Deseja encerrar sua sessao?</Text>
         <Text className="mt-1 text-xs text-muted-foreground">
-          Você precisará fazer login novamente para continuar.
+          Voce precisara fazer login novamente para continuar.
         </Text>
 
         <View className="mt-3 flex-row justify-end gap-2">
@@ -83,21 +73,10 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
       </AnchoredModal>
 
       <View
-        className={
-          isDesktop
-            ? "z-20 w-full max-w-screen-2xl self-center flex-row items-center justify-end gap-3"
-            : "z-20 w-full flex-row items-center justify-between gap-3"
-        }
+        className={"z-20 w-full max-w-screen-2xl self-center flex-row items-center justify-end gap-3"}
       >
-
-        <View
-          className={
-            isDesktop
-              ? "flex-row items-center gap-3"
-              : "flex-row items-center gap-2"
-          }
-        >
-          <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+        <View className={"flex-row items-center gap-3"}>
+          <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
 
           <View className="relative">
             <TouchableOpacity

@@ -1,8 +1,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { router, usePathname } from "expo-router";
-import { useColorScheme } from "nativewind";
 import {
   ChevronDown,
   ChevronLeft,
@@ -10,14 +9,18 @@ import {
   ChevronUp,
   Home,
   LogOut,
+  UserCircle2,
   Settings,
+  Users,
   type LucideIcon,
 } from "lucide-react-native";
 
 import { AnchoredModal } from "@/shared/components/AnchoredModal";
 import { Button } from "@/shared/components/ui/Button";
 import { useAuth } from "@/shared/contexts/AuthContext";
+import { useTheme } from "@/shared/hooks/useTheme";
 import type { User } from "@/shared/types/user.types";
+import { theme } from "@/shared/styles/theme";
 import { cn, isWeb } from "@/shared/lib/utils";
 
 type SidebarMenuItem = {
@@ -29,6 +32,14 @@ type SidebarMenuItem = {
 };
 
 const isAdmin = (user: User | null): boolean => Boolean(user?.is_admin);
+const normalizeRoute = (route: string | null | undefined): string => {
+  if (!route) return "/";
+
+  const withoutGroups = route.replace(/\/?\([^/]+\)/g, "");
+  const normalized = withoutGroups.replace(/\/+/g, "/").replace(/\/$/, "");
+
+  return normalized || "/";
+};
 
 interface SidebarProps {
   className?: string;
@@ -40,8 +51,9 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { width: screenWidth } = useWindowDimensions();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
+  const currentTheme = isDark ? theme.dark : theme.light;
+  const mutedIconColor = `${currentTheme.foreground}80`;
 
   const menuItems: SidebarMenuItem[] = useMemo(
     () => [
@@ -50,6 +62,18 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
         label: "Home",
         icon: Home,
         href: "/(authenticated)",
+      },
+      {
+        key: "users",
+        label: "Usuarios",
+        icon: Users,
+        href: "/(authenticated)/users",
+      },
+      {
+        key: "profile",
+        label: "Perfil",
+        icon: UserCircle2,
+        href: "/(authenticated)/profile",
       },
     ],
     []
@@ -62,9 +86,11 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const [isCollapsed, setIsCollapsed] = useState(() => screenWidth < 1024);
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [activeSettingsOption, setActiveSettingsOption] = useState<"logout" | null>(null);
+  const [hoveredItemKey, setHoveredItemKey] = useState<string | null>(null);
+  const [pressedItemKey, setPressedItemKey] = useState<string | null>(null);
   const settingsButtonRef = useRef<any>(null);
 
-  const expandedWidth = 228;
+  const expandedWidth = 180;
   const collapsedWidth = 76;
   const sidebarWidth = useSharedValue(isCollapsed ? collapsedWidth : expandedWidth);
 
@@ -107,46 +133,56 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
     logout();
   };
 
-  const isHomeActive = useMemo(() => {
+  const isItemActive = (item: SidebarMenuItem): boolean => {
     if (!pathname) return false;
-    return pathname === "/(authenticated)" || pathname.startsWith("/(authenticated)/");
-  }, [pathname]);
+
+    const normalizedPathname = normalizeRoute(pathname);
+    const normalizedItemHref = normalizeRoute(item.href);
+
+    if (item.key === "home") {
+      return normalizedPathname === "/";
+    }
+    return (
+      normalizedPathname === normalizedItemHref ||
+      normalizedPathname.startsWith(`${normalizedItemHref}/`)
+    );
+  };
 
   const renderItem = (item: SidebarMenuItem, isActive: boolean) => {
     const isAdminItem = Boolean(item.adminOnly);
     const ItemIcon = item.icon;
-    const iconColor = isActive
-      ? isDark
-        ? "hsl(210, 40%, 98%)"
-        : "hsl(222, 47%, 11%)"
-      : "hsl(215, 16%, 47%)";
+    const isHovered = hoveredItemKey === item.key;
+    const isPressed = pressedItemKey === item.key;
+    const iconColor = isActive || isHovered || isPressed ? currentTheme.foreground : mutedIconColor;
+    const labelClassName =
+      isActive || isHovered || isPressed
+        ? "text-sm font-bold text-foreground"
+        : "text-sm font-bold text-muted-foreground/70";
 
     return (
-      <TouchableOpacity
+      <Pressable
         key={item.key}
-        activeOpacity={0.85}
         onPress={() => handleNavigate(item.href)}
+        onHoverIn={() => setHoveredItemKey(item.key)}
+        onHoverOut={() => setHoveredItemKey((prev) => (prev === item.key ? null : prev))}
+        onPressIn={() => setPressedItemKey(item.key)}
+        onPressOut={() => setPressedItemKey((prev) => (prev === item.key ? null : prev))}
         className={cn(
-          "mt-1 flex-row items-center rounded-2xl px-2.5 py-2",
-          isCollapsed ? "justify-center" : "gap-3",
-          isActive ? "bg-muted/70" : "web:hover:bg-muted/40",
-          isAdminItem && !isActive ? "border border-primary/20 bg-primary/5" : "border border-transparent"
+          "mt-1.5 min-h-11 flex-row items-center rounded-xl border px-3 py-2.5 transition-colors",
+          isCollapsed ? "justify-center px-0" : "gap-3",
+          isActive
+            ? "border-border/80 bg-foreground/10"
+            : "border-transparent web:hover:border-border/70 web:hover:bg-muted/50",
+          isPressed && !isActive && "border-border/80 bg-foreground/10",
+          isAdminItem && !isActive && "border-primary/20 bg-primary/5 web:hover:bg-primary/10"
         )}
         accessibilityRole="link"
         accessibilityLabel={item.label}
       >
-        <View
-          className={cn(
-            "h-10 w-10 items-center justify-center rounded-xl",
-            isActive ? "bg-card shadow-sm shadow-black/10" : "bg-transparent"
-          )}
-        >
-          <ItemIcon size={18} color={iconColor} strokeWidth={2.2} />
-        </View>
-
+        <ItemIcon size={18} color={iconColor} strokeWidth={2.2} />
         {!isCollapsed ? (
           <View className="flex-1 flex-row items-center justify-between">
-            <Text className="text-sm font-semibold text-foreground">{item.label}</Text>
+            <Text className={labelClassName}>{item.label}</Text>
             {isAdminItem ? (
               <View className="rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5">
                 <Text className="text-[10px] font-bold text-primary">ADMIN</Text>
@@ -154,18 +190,25 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
             ) : null}
           </View>
         ) : null}
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   return (
-    <Animated.View style={[{ height: "100%" }, sidebarAnimatedStyle]}>
+    <Animated.View style={[{ height: "100%",zIndex: 49 }, sidebarAnimatedStyle]}>
       <View
         className={cn(
-          "flex-1 border-r border-border/60 bg-background/95",
+          "flex-1 bg-background/95",
           "web:backdrop-blur supports-[backdrop-filter]:web:bg-background/80",
           className
         )}
+        style={{
+          shadowColor: currentTheme.foreground,
+          shadowOffset: { width: 2, height: 0 },
+          shadowOpacity: 0.05,
+          shadowRadius: 10,
+          elevation: 12,
+        }}
       >
         <AnchoredModal
           isOpen={isSettingsMenuOpen}
@@ -192,13 +235,13 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
                 accessibilityRole="button"
                 accessibilityLabel="Sair"
               >
-                <LogOut size={15} color="hsl(0, 72%, 51%)" strokeWidth={2.2} />
+                <LogOut size={15} color="hsl(var(--destructive))" strokeWidth={2.2} />
                 <Text className="text-xs font-semibold text-foreground">Sair</Text>
               </TouchableOpacity>
             </View>
 
             {activeSettingsOption === "logout" ? (
-              <View className="absolute left-[calc(100%+0.5rem)] top-0 w-64 rounded-2xl border border-destructive/25 bg-card p-3 shadow-lg shadow-black/15">
+              <View className="absolute left-[calc(100%+0.5rem)] top-0 w-64 rounded-2xl border border-destructive/25 bg-card p-3 shadow-lg">
                 <Text className="text-sm font-medium text-foreground">Deseja encerrar sua sessão?</Text>
                 <Text className="mt-1 text-xs text-muted-foreground">
                   Você precisará fazer login novamente para continuar.
@@ -229,22 +272,22 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
         </AnchoredModal>
 
         <View className={cn("px-3 pb-3 pt-4", isCollapsed ? "items-center" : "items-end")}>
-            <TouchableOpacity
-              activeOpacity={0.85}
-              onPress={() => setIsCollapsed((prev) => !prev)}
-              className="h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card shadow-sm shadow-black/10"
-              accessibilityLabel={isCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
-            >
-              {isCollapsed ? (
-                <ChevronRight size={18} color="hsl(215, 16%, 47%)" strokeWidth={2.3} />
-              ) : (
-                <ChevronLeft size={18} color="hsl(215, 16%, 47%)" strokeWidth={2.3} />
-              )}
-            </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => setIsCollapsed((prev) => !prev)}
+            className="h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card shadow-sm web:hover:bg-muted/45 web:active:bg-muted/65"
+            accessibilityLabel={isCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronRight size={18} color="hsl(var(--muted-foreground))" strokeWidth={2.3} />
+            ) : (
+              <ChevronLeft size={18} color="hsl(var(--muted-foreground))" strokeWidth={2.3} />
+            )}
+          </TouchableOpacity>
         </View>
 
         <View className="flex-1 px-2">
-          {menuItems.map((item) => renderItem(item, item.key === "home" ? isHomeActive : false))}
+          {menuItems.map((item) => renderItem(item, isItemActive(item)))}
 
           {userIsAdmin && adminMenuItems.length > 0 ? (
             <View className="mt-4">
@@ -270,12 +313,12 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
             className={cn(
               "flex-row items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2",
               isCollapsed ? "justify-center px-0 w-12" : "w-full justify-between",
-              "web:hover:bg-muted/40"
+              "web:hover:bg-muted/45 web:active:bg-muted/65"
             )}
             accessibilityLabel="Configurações"
           >
             <View className={cn("flex-row items-center", isCollapsed ? "" : "gap-2")}>
-              <Settings size={16} color="hsl(215, 16%, 47%)" strokeWidth={2.2} />
+              <Settings size={16} color="hsl(var(--muted-foreground))" strokeWidth={2.2} />
               {!isCollapsed ? (
                 <Text className="text-xs font-semibold text-foreground">Configurações</Text>
               ) : null}
@@ -283,9 +326,9 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
 
             {!isCollapsed ? (
               isSettingsMenuOpen ? (
-                <ChevronUp size={14} color="hsl(215, 16%, 47%)" strokeWidth={2.4} />
+                <ChevronUp size={14} color="hsl(var(--muted-foreground))" strokeWidth={2.4} />
               ) : (
-                <ChevronDown size={14} color="hsl(215, 16%, 47%)" strokeWidth={2.4} />
+                <ChevronDown size={14} color="hsl(var(--muted-foreground))" strokeWidth={2.4} />
               )
             ) : null}
           </TouchableOpacity>
