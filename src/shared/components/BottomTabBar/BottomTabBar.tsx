@@ -108,7 +108,7 @@ export const BottomTabBar: FC<BottomTabBarProps> = ({
             >
               <View
                 className={cn(
-                  "h-11 w-11 items-center justify-center rounded-xl border transition-colors",
+                  "h-14 w-14 items-center justify-center rounded-xl border transition-colors",
                   isActive
                     ? "border-border/80 bg-foreground/10"
                     : "border-transparent bg-transparent",

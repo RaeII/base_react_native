@@ -1,5 +1,5 @@
 import { FC, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { AnchoredModal } from "@/shared/components/AnchoredModal";
@@ -34,7 +34,11 @@ export const ProfileView: FC<ReturnType<typeof useProfileModel>> = ({
   };
 
   return (
-    <View className="flex-1 bg-background p-4 web:p-6">
+    <ScrollView
+      className="flex-1 bg-background"
+      contentContainerClassName="p-4 web:p-6 pb-8"
+      showsVerticalScrollIndicator={false}
+    >
       <AnchoredModal
         isOpen={isLogoutMenuOpen}
         onClose={handleCloseLogoutMenu}
@@ -130,6 +134,6 @@ export const ProfileView: FC<ReturnType<typeof useProfileModel>> = ({
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };

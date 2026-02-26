@@ -1,9 +1,11 @@
 import { Redirect, Stack, usePathname } from "expo-router";
 import { View, ActivityIndicator, Platform, useWindowDimensions } from "react-native";
+import { useColorScheme, vars } from "nativewind";
 import { useAuth } from "@/shared/contexts/AuthContext";
 import { Sidebar } from "@/shared/components/Sidebar";
 import { BottomTabBar } from "@/shared/components/BottomTabBar";
 import { AuthenticatedHeader } from "@/shared/components/AuthenticatedHeader";
+import { getThemeTokens } from "@/shared/styles/theme";
 
 /**
  * Layout guard para rotas autenticadas.
@@ -14,8 +16,11 @@ import { AuthenticatedHeader } from "@/shared/components/AuthenticatedHeader";
 export default function AuthenticatedLayout() {
   const { user, loading } = useAuth();
   const pathname = usePathname();
+  const { colorScheme } = useColorScheme();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
+  const isDarkMode = colorScheme === "dark";
+  const themeVars = vars(getThemeTokens(isDarkMode));
   const maxContentWidth = 1536;
   const isLargeScreen = width >= 1024;
   const useSidebar = isWeb && width >= 1024;
@@ -38,7 +43,7 @@ export default function AuthenticatedLayout() {
     return <Redirect href="/(auth)/Login" />;
   }
   return (
-    <View className="flex-1 bg-shell">
+    <View className="flex-1 bg-shell" style={themeVars}>
       <View className="flex-1" style={{ flexDirection: useSidebar ? "row" : "column" }}>
         {useSidebar && shouldShowNav ? <Sidebar /> : null}
         <View className="flex-1">
@@ -50,7 +55,7 @@ export default function AuthenticatedLayout() {
             }`}
             style={isLargeScreen ? { maxWidth: maxContentWidth } : undefined}
           >
-            {noShowHeader ? <AuthenticatedHeader /> : null}
+            {isWeb && noShowHeader ? <AuthenticatedHeader /> : null}
             <Stack
               screenOptions={{
                 headerShown: false,

@@ -179,7 +179,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
         accessibilityRole="link"
         accessibilityLabel={item.label}
       >
-        <ItemIcon size={18} color={iconColor} strokeWidth={2.2} />
+        <ItemIcon size={20} color={iconColor} strokeWidth={2.5} />
         {!isCollapsed ? (
           <View className="flex-1 flex-row items-center justify-between">
             <Text className={labelClassName}>{item.label}</Text>

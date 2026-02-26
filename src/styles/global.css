@@ -94,10 +94,10 @@
 
   .dark {
     /* === TEMA ESCURO === */
-    /* Fundo principal - Preto padrão escuro */
-    --background: 222 47% 5%;
-    /* Fundo externo mais preto para aumentar contraste */
-    --shell: 222 47% 3%;
+    /* Fundo principal - Preto suavizado para consistência entre Web e Mobile */
+    --background: 222 35% 9%;
+    /* Fundo externo mais escuro para aumentar contraste */
+    --shell: 222 35% 7%;
     /* Texto principal - Branco */
     --foreground: 210 40% 98%;
 
@@ -126,13 +126,13 @@
     /* Texto destrutivo */
     --destructive-foreground: 210 40% 98%;
 
-    /* Card - Preto mais claro */
-    --card: 222 47% 7%;
+    /* Card - Preto mais claro que o background */
+    --card: 222 35% 11%;
     /* Texto do card */
     --card-foreground: 210 40% 98%;
 
     /* Popover */
-    --popover: 222 47% 7%;
+    --popover: 222 35% 11%;
     /* Texto do popover */
     --popover-foreground: 210 40% 98%;
 

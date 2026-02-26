@@ -3,7 +3,10 @@ import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Head from "expo-router/head";
 import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated";
+import { vars } from "nativewind";
 import { AuthProvider } from "@/shared/contexts/AuthContext";
+import { useTheme } from "@/shared/hooks/useTheme";
+import { getThemeTokens } from "@/shared/styles/theme";
 import "@/styles/global.css";
 
 configureReanimatedLogger({
@@ -14,6 +17,8 @@ configureReanimatedLogger({
 const queryClient = new QueryClient();
 
 export default function Layout() {
+    const { colorScheme } = useTheme();
+    const themeVars = vars(getThemeTokens(colorScheme === "dark"));
 
     const Header = () => {
         return (
@@ -27,7 +32,7 @@ export default function Layout() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
+        <SafeAreaView className="flex-1 bg-background" style={themeVars}>
             <AuthProvider>
                 <QueryClientProvider client={queryClient}>
                     <Header />
